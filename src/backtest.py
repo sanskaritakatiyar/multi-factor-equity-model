@@ -8,15 +8,16 @@ def run_backtest(prices, positions):
 
 if __name__ == "__main__":
     from data_loader import load_all_prices, SP100_TICKERS
-    from factors import compute_momentum, compute_volatility, compute_value
+    from factors import compute_momentum, compute_volatility, compute_value, compute_smb
     from portfolio import construct_portfolio, assign_positions
 
     prices = load_all_prices()
     momentum = compute_momentum(prices)
     volatility = compute_volatility(prices)
     value = compute_value(SP100_TICKERS)
-    composite = construct_portfolio(momentum, volatility, value)
+    smb = compute_smb(SP100_TICKERS)
+    composite = construct_portfolio(momentum, volatility, value, smb)
     positions = assign_positions(composite)
-    
+
     returns = run_backtest(prices, positions)
     print(returns.tail(12))

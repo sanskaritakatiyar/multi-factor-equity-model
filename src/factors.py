@@ -14,13 +14,30 @@ def compute_volatility(prices):
 def compute_value(tickers):
     pe_ratios = {}
     for ticker in tickers:
-        info = yf.Ticker(ticker).info
-        pe = info.get('trailingPE')
+        try:
+            info = yf.Ticker(ticker).info
+            pe = info.get('trailingPE')
+        except Exception:
+            pe = None
         pe_ratios[ticker] = pe
     pe_series = pd.Series(pe_ratios)
     pe_series = pe_series.fillna(pe_series.median())
     pe_series = -pe_series
     return pe_series
+
+def compute_smb(tickers):
+    market_caps = {}
+    for ticker in tickers:
+        try:
+            info = yf.Ticker(ticker).info
+            mc = info.get('marketCap')
+        except Exception:
+            mc = None
+        market_caps[ticker] = mc
+    mc_series = pd.Series(market_caps)
+    mc_series = mc_series.fillna(mc_series.median())
+    mc_series = -mc_series
+    return mc_series
 
 if __name__ == "__main__":
     from data_loader import load_all_prices, SP100_TICKERS
@@ -28,6 +45,6 @@ if __name__ == "__main__":
     momentum = compute_momentum(prices)
     volatility = compute_volatility(prices)
     value = compute_value(SP100_TICKERS)
-    print(value.head(10))
-    print(f"Missing P/E values: {value.isnull().sum()}")
-    print(f"Negative P/E values: {(value < 0).sum()}")
+    smb = compute_smb(SP100_TICKERS)
+    print(smb.head(10))
+    print(f"Missing SMB values: {smb.isnull().sum()}")
