@@ -17,8 +17,15 @@ A multi-factor equity model that scores S&P 100 stocks on momentum, volatility, 
 ## Results
 - **Sharpe Ratio**: -0.915
 - **Max Drawdown**: -16.2%
+- **Sharpe Ratio**: -0.930
+- **Max Drawdown**: -16.5%
+- **Mean IC**: -0.074
+- **ICIR**: -0.278
 
 ![Cumulative Returns](results/cumulative_returns.png)
+
+## Interpretation
+The negative Sharpe ratio and negative IC indicate that, as currently constructed, this factor model does not predict future returns — stocks ranked highest by the composite score performed slightly worse than stocks ranked lowest over the backtest period. This is a meaningful finding in itself: it suggests the model's weaknesses (documented below) may be distorting the signal, particularly the survivorship bias in the universe and the static nature of the value and SMB factors. A natural next step would be re-running this analysis with point-in-time fundamentals and a survivorship-bias-free universe.
 
 ## Limitations
 - **Limitation 1**: Survivorship bias. We used today's S&P 100 list, which only contains companies that are large and successful right now. Companies that were in the index 5 years ago but later got dropped (due to poor performance, bankruptcy, mergers) are excluded. This makes our universe look better than it actually was historically.
